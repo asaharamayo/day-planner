@@ -1,0 +1,11 @@
+{
+  "documents": [
+    {
+      "title": "Weekly planning",
+      "eventStartTime": "2026-11-24T02:00:00",
+      "eventEndTime": "2026-11-24T02:30:00",
+      "snippets": ["https://zoom.us/j/0000000000"],
+      "url": "https://calendar.example.com/event/1"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>マヨのプランナー❤️</title>
+    <link rel="icon" type="image/jpeg" href="mayo-icon.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=13" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="left-col">
+        <section class="panel todo-panel">
+          <div class="panel-head">
+            <h2>やること</h2>
+            <div class="panel-head-actions">
+              <button type="button" id="add-block-btn" class="btn ghost compact">ブロック追加</button>
+              <span id="inbox-count" class="pill">0</span>
+            </div>
+          </div>
+          <p id="inbox-source" class="hint">ドリル + デイリータスク</p>
+          <div id="inbox-list" class="inbox-list"></div>
+        </section>
+
+        <section class="panel pulse-panel">
+          <div class="panel-head">
+            <h2>パルス</h2>
+          </div>
+          <div id="pulse-list" class="pulse-list"></div>
+        </section>
+
+        <section class="panel pomodoro-panel">
+          <div class="panel-head">
+            <h2>ポモドーロ</h2>
+            <span id="pomodoro-mode" class="pill">集中 · 25/5</span>
+          </div>
+          <div class="pomodoro-presets">
+            <button type="button" id="preset-short" class="btn ghost compact preset-btn active">25/5</button>
+            <button type="button" id="preset-long" class="btn ghost compact preset-btn">50/10</button>
+          </div>
+          <div class="pomodoro-center">
+            <div id="pomodoro-display" class="pomodoro-display">25:00</div>
+            <div class="pomodoro-actions">
+              <button type="button" id="pomodoro-toggle" class="btn primary compact">開始</button>
+              <button type="button" id="pomodoro-reset" class="btn ghost compact">リセット</button>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <main class="center-col">
+        <header class="center-head">
+          <div class="brand-inline">
+            <img class="brand-mark" src="mayo-icon.jpg" alt="" width="38" height="38" />
+            <div>
+              <h1>マヨのプランナー❤️</h1>
+              <p id="time-summary" class="time-summary">会議 0分 · 集中 0分</p>
+            </div>
+          </div>
+          <div class="workflow-actions">
+            <button type="button" id="good-morning-btn" class="btn ghost compact">おはよう</button>
+            <button type="button" id="eod-btn" class="btn ghost compact">今日はここまで</button>
+            <button type="button" id="refresh-btn" class="btn ghost compact">更新</button>
+          </div>
+        </header>
+
+        <section class="panel notes-panel">
+          <div class="panel-head">
+            <h2>メモ</h2>
+            <button type="button" id="save-note-btn" class="btn primary compact">保存</button>
+          </div>
+          <textarea
+            id="note-editor"
+            class="note-editor"
+          ></textarea>
+          <p id="note-status" class="hint"></p>
+        </section>
+      </main>
+
+      <aside class="right-col">
+        <header class="timeline-head">
+          <div class="timeline-head-row">
+            <div class="day-nav">
+              <button id="prev-day" class="icon-btn" aria-label="前の日">←</button>
+              <button id="today-btn" class="btn ghost compact">今日</button>
+              <button id="next-day" class="icon-btn" aria-label="次の日">→</button>
+            </div>
+            <button id="clear-day-btn" class="btn ghost compact danger-text">集中をクリア</button>
+          </div>
+          <input id="day-picker" type="date" aria-label="日付を選択" />
+          <h2 id="day-label" class="day-label"></h2>
+          <div id="meeting-chips" class="meeting-chips" hidden></div>
+        </header>
+        <div class="timeline-scroll" id="timeline-scroll">
+          <div class="day-grid" id="day-grid"></div>
+        </div>
+      </aside>
+    </div>
+
+    <dialog id="add-dialog" class="edit-dialog">
+      <form method="dialog" id="add-form">
+        <h3>インボックスに追加</h3>
+        <label>
+          タイトル
+          <input id="task-title" type="text" placeholder="集中ブロックのタイトル" autocomplete="off" required />
+        </label>
+        <label>
+          カテゴリ
+          <select id="task-category" aria-label="カテゴリ"></select>
+        </label>
+        <label>
+          時間（分）
+          <input
+            id="task-duration"
+            type="number"
+            min="15"
+            max="240"
+            step="15"
+            value="45"
+            aria-label="時間（分）"
+          />
+        </label>
+        <div class="dialog-actions">
+          <div></div>
+          <div class="dialog-actions-right">
+            <button type="button" id="cancel-add-btn" class="btn ghost">キャンセル</button>
+            <button type="submit" class="btn primary">追加</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="edit-dialog" class="edit-dialog">
+      <form method="dialog" id="edit-form">
+        <h3>ブロックを編集</h3>
+        <label>
+          タイトル
+          <input id="edit-title" type="text" required />
+        </label>
+        <label>
+          カテゴリ
+          <select id="edit-category"></select>
+        </label>
+        <label>
+          開始
+          <input id="edit-start" type="time" step="900" />
+        </label>
+        <label>
+          時間（分）
+          <input id="edit-duration" type="number" min="15" max="480" step="15" />
+        </label>
+        <div class="dialog-actions">
+          <button type="button" id="delete-block-btn" class="btn ghost danger-text">削除</button>
+          <div class="dialog-actions-right">
+            <button type="button" id="cancel-edit-btn" class="btn ghost">キャンセル</button>
+            <button type="submit" class="btn primary">保存</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="app.js?v=17"></script>
+  </body>
+</html>
