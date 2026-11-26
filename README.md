@@ -1,7 +1,7 @@
 # Day planner
 
 Single-day timeline: tasks, notes, pomodoro, and a calendar strip. Runs locally. No account required.
-![Uploading image.png…]()
+![Day planner](preview.png)
 
 ## Run
 
